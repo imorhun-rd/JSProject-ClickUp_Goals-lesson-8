@@ -25,6 +25,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import {faker} from "@faker-js/faker";
+import * as allure from "allure-js-commons";
 
 
 Cypress.Commands.add('sendRequest', (endpoint, method, body = null) => {
@@ -47,44 +48,54 @@ Cypress.Commands.add('sendRequest', (endpoint, method, body = null) => {
 
 
 Cypress.Commands.add('getGoal', (goal_id) => {
-    cy.sendRequest('goal/' + (goal_id), 'GET')
+    allure.step('Get goal ' + goal_id, () => {
+        cy.sendRequest('goal/' + (goal_id), 'GET')
+    })
 });
 
 
 Cypress.Commands.add('createGoal', () => {
-    cy.sendRequest('team/90151115904/goal', 'POST', {
-        "name": faker.person.jobTitle(),
-        "description": faker.lorem.words(5)
-    })
-        .then((response) => {
-            expect(response.status).to.equal(200)
-            cy.wrap(response.body.goal.id).as('goal_id')
+    allure.step('Create goal', () => {
+        cy.sendRequest('team/90151236813/goal', 'POST', {
+            "name": faker.person.jobTitle(),
+            "description": faker.lorem.words(5)
         })
-    cy.get('@goal_id').then((goal_id) => {
-        cy.getGoal(goal_id)
             .then((response) => {
                 expect(response.status).to.equal(200)
+                cy.wrap(response.body.goal.id).as('goal_id')
             })
+        cy.get('@goal_id').then((goal_id) => {
+            cy.getGoal(goal_id)
+                .then((response) => {
+                    expect(response.status).to.equal(200)
+                })
+        })
     })
 });
 
 
 Cypress.Commands.add('updateGoal', () => {
     cy.createGoal()
-    cy.get('@goal_id').then((goal_id) => {
-        cy.sendRequest('goal/' + (goal_id), 'PUT', {
-            "name": faker.person.jobTitle(),
-            "description": faker.lorem.words(5)
+    allure.step('Update goal', () => {
+        cy.get('@goal_id').then((goal_id) => {
+            cy.sendRequest('goal/' + (goal_id), 'PUT', {
+                "name": faker.person.jobTitle(),
+                "description": faker.lorem.words(5)
+            })
         })
     })
 });
 
 
 Cypress.Commands.add('deleteGoal', (goal_id) => {
-    cy.sendRequest('goal/' + (goal_id), 'DELETE')
+    allure.step('Delete goal ' + goal_id, () => {
+        cy.sendRequest('goal/' + (goal_id), 'DELETE')
+    })
 });
 
 
 Cypress.Commands.add('createGoalFromFile', (body) => {
-    cy.sendRequest('team/90151115904/goal', 'POST', body)
+    allure.step('Create goal from file', () => {
+        cy.sendRequest('team/90151236813/goal', 'POST', body)
+    })
 });

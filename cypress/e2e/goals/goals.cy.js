@@ -15,10 +15,10 @@ describe('Test Goals on ClickUp', () => {
         cy.fixture('create_goal.json').then((body) => {
             body.name = faker.person.jobTitle();
             body.description = faker.lorem.words(5)
-        cy.createGoalFromFile(body)
-            .then((response) => {
-                expect(response.status).to.equal(200)
-            })
+            cy.createGoalFromFile(body)
+                .then((response) => {
+                    expect(response.status).to.equal(200)
+                })
         })
     })
 
