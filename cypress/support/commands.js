@@ -33,7 +33,7 @@ Cypress.Commands.add('sendRequest', (endpoint, method, body = null) => {
         method: method,
         url: endpoint,
         headers: {
-            'Authorization': Cypress.env('Authorization'),
+            'Authorization': Cypress.env('token'),
             'Content-Type': 'application/json'
         },
         body: body,

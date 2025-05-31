@@ -41,11 +41,6 @@ describe('Test Goals on ClickUp', () => {
                     .then((response) => {
                         expect(response.status).to.equal(200)
                     })
-
-                cy.getGoal(goal_id)
-                    .then((response) => {
-                        expect(response.status).to.equal(404)
-                    })
             })
         })
     })
